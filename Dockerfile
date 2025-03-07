@@ -1,6 +1,14 @@
-FROM python:3.9
-WORKDIR app
-COPY . /app
-RUN pip install -r requirements.txt 
-EXPOSE 8001
-CMD ["python","manage.py","runserver","0.0.0.0:8001"]
+# syntax=docker/dockerfile:1
+FROM ubuntu:22.04
+
+# install app dependencies
+RUN apt-get update && apt-get install -y python3 python3-pip
+RUN pip install flask==3.0.*
+
+# install app
+COPY hello.py /
+
+# final configuration
+ENV FLASK_APP=hello
+EXPOSE 8000
+CMD ["flask", "run", "--host", "0.0.0.0", "--port", "8000"]
